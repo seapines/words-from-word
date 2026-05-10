@@ -1,0 +1,16 @@
+[
+  {
+    "word": "место",
+    "number": "singular",
+    "isPluralOnly": false,
+    "isProperName": false,
+    "isAbbreviation": false
+  },
+  {
+    "word": "ножницы",
+    "number": "plural",
+    "isPluralOnly": true,
+    "isProperName": false,
+    "isAbbreviation": false
+  }
+]

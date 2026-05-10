@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Слова из слова</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <button id="back-to-menu" class="ghost-button hidden" type="button">К списку слов</button>
+      </header>
+
+      <main>
+        <section id="menu-screen" class="screen active" aria-labelledby="menu-title">
+          <div class="section-heading">
+            <h2 id="menu-title">Выберите слово</h2>
+            <p>Прогресс сохраняется в этом браузере.</p>
+          </div>
+          <div id="word-menu" class="word-menu"></div>
+        </section>
+
+        <section id="game-screen" class="screen" aria-labelledby="game-title">
+          <div class="game-layout">
+            <section class="panel play-panel">
+              <p class="eyebrow">Большое слово</p>
+              <h2 id="game-title"></h2>
+              <p id="progress-text" class="progress-text"></p>
+
+              <form id="guess-form" class="guess-form" autocomplete="off">
+                <label for="guess-input">Ваш ответ</label>
+                <div class="guess-row">
+                  <input id="guess-input" name="guess" type="text" inputmode="text" lang="ru" spellcheck="false">
+                  <button type="submit">Проверить</button>
+                </div>
+              </form>
+
+              <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
+
+              <div class="actions-row">
+                <button id="hint-button" class="secondary-button" type="button">Подсказка</button>
+                <button id="reset-button" class="danger-button" type="button">Сбросить прогресс</button>
+              </div>
+
+              <div id="hint-box" class="hint-box hidden"></div>
+              <div id="win-message" class="win-message hidden"></div>
+            </section>
+
+            <section class="panel answers-panel" aria-labelledby="answers-title">
+              <div class="answers-header">
+                <div>
+                  <p class="eyebrow">Ответы</p>
+                  <h2 id="answers-title" class="visually-hidden">Ответы</h2>
+                </div>
+                <span id="answer-count" class="answer-count"></span>
+              </div>
+              <div id="answer-list" class="answer-list"></div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="definition-dialog" class="definition-dialog">
+      <button id="close-definition" class="dialog-close" type="button" aria-label="Закрыть">×</button>
+      <p class="eyebrow">Значение</p>
+      <h2 id="definition-word"></h2>
+      <p id="definition-text"></p>
+      <a id="definition-source" href="#" target="_blank" rel="noreferrer">Источник</a>
+    </dialog>
+
+    <script src="data/game-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "serve": "npx serve . -l 5173",
+    "generate": "node tools/generate-from-openrussian.mjs",
+    "generate:harrix": "node tools/generate-from-word-list.mjs",
+    "definitions:ozhegov": "node tools/import-ozhegov-definitions.mjs",
+    "definitions:missing": "node tools/fetch-wiktionary-definitions.mjs --missing --limit=500",
+    "definitions:all": "node tools/fetch-wiktionary-definitions.mjs --missing --limit=all",
+    "definitions:gramota": "node tools/fetch-gramota-definition.mjs --missing --limit=50",
+    "check": "node --check app.js && node --check tools/generate-from-openrussian.mjs && node --check tools/generate-from-word-list.mjs && node --check tools/generate-data.mjs && node --check tools/fetch-gramota-definition.mjs && node --check tools/fetch-wiktionary-definitions.mjs && node --check tools/import-ozhegov-definitions.mjs"
+  },
+  "devDependencies": {}
+}
