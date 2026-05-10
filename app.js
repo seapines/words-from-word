@@ -1,5 +1,6 @@
 (function () {
   const STORAGE_PREFIX = "words-from-word:";
+  const WORD_ROUTE_PARAM = "word";
   const fallbackGameData = {
     dictionaryName: "Демонстрационный список",
     generatedAt: "2026-05-10",
@@ -148,6 +149,66 @@
     return [...puzzle.answers].sort((a, b) => a.word.localeCompare(b.word, "ru"));
   }
 
+  function findPuzzle(puzzleWord) {
+    const normalized = normalizeWord(puzzleWord || "");
+    return gameData.bigWords.find((item) => normalizeWord(item.word) === normalized);
+  }
+
+  function routeUrlForPuzzle(puzzleWord) {
+    const url = new URL(window.location.href);
+    url.searchParams.set(WORD_ROUTE_PARAM, puzzleWord);
+    return `${url.pathname}${url.search}`;
+  }
+
+  function menuRouteUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(WORD_ROUTE_PARAM);
+    return `${url.pathname}${url.search}`;
+  }
+
+  function navigateToPuzzle(puzzleWord) {
+    const puzzle = findPuzzle(puzzleWord);
+    if (!puzzle) {
+      return;
+    }
+
+    history.pushState({ screen: "game", word: puzzle.word, fromMenu: true }, "", routeUrlForPuzzle(puzzle.word));
+    startPuzzle(puzzle.word);
+  }
+
+  function navigateToMenu() {
+    if (history.state?.screen === "game" && history.state.fromMenu) {
+      history.back();
+      return;
+    }
+
+    history.replaceState({ screen: "menu" }, "", menuRouteUrl());
+    showMenu();
+  }
+
+  function renderRoute(isInitialLoad = false) {
+    const routedWord = new URLSearchParams(window.location.search).get(WORD_ROUTE_PARAM);
+    const puzzle = findPuzzle(routedWord);
+
+    if (routedWord && puzzle) {
+      if (isInitialLoad && !history.state) {
+        history.replaceState({ screen: "menu" }, "", menuRouteUrl());
+        history.pushState({ screen: "game", word: puzzle.word, fromMenu: true }, "", routeUrlForPuzzle(puzzle.word));
+      } else {
+        history.replaceState({ screen: "game", word: puzzle.word, fromMenu: false }, "", routeUrlForPuzzle(puzzle.word));
+      }
+      startPuzzle(puzzle.word);
+      return;
+    }
+
+    if (routedWord) {
+      history.replaceState({ screen: "menu" }, "", menuRouteUrl());
+    } else if (!history.state) {
+      history.replaceState({ screen: "menu" }, "", menuRouteUrl());
+    }
+    showMenu();
+  }
+
   function renderMenu() {
     elements.wordMenu.innerHTML = "";
 
@@ -167,13 +228,13 @@
         word.textContent = hyphenateRussianWord(puzzle.word);
         progressText.textContent = `${found} из ${total} найдено`;
         button.append(word, progressText);
-        button.addEventListener("click", () => startPuzzle(puzzle.word));
+        button.addEventListener("click", () => navigateToPuzzle(puzzle.word));
         elements.wordMenu.append(button);
       });
   }
 
   function startPuzzle(puzzleWord) {
-    const puzzle = gameData.bigWords.find((item) => item.word === puzzleWord);
+    const puzzle = findPuzzle(puzzleWord);
     if (!puzzle) {
       return;
     }
@@ -443,14 +504,15 @@
   elements.guessForm.addEventListener("submit", submitGuess);
   elements.hintButton.addEventListener("click", showHint);
   elements.resetButton.addEventListener("click", resetProgress);
-  elements.backToMenu.addEventListener("click", showMenu);
+  elements.backToMenu.addEventListener("click", navigateToMenu);
   elements.closeDefinition.addEventListener("click", closeDefinition);
   elements.definitionDialog.addEventListener("click", (event) => {
     if (event.target === elements.definitionDialog) {
       closeDefinition();
     }
   });
+  window.addEventListener("popstate", () => renderRoute());
   window.addEventListener("resize", paintSharedAnswerGradient);
 
-  renderMenu();
+  renderRoute(true);
 })();
