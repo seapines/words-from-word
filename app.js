@@ -193,6 +193,7 @@
     elements.gameScreen.classList.add("active");
     elements.gameScreen.classList.remove("won");
     elements.backToMenu.classList.remove("hidden");
+    elements.resetButton.classList.remove("hidden");
     elements.gameTitle.textContent = puzzle.word;
     elements.guessInput.value = "";
     elements.hintBox.classList.add("hidden");
@@ -211,6 +212,7 @@
     elements.gameScreen.classList.remove("won");
     elements.menuScreen.classList.add("active");
     elements.backToMenu.classList.add("hidden");
+    elements.resetButton.classList.add("hidden");
     renderMenu();
   }
 
