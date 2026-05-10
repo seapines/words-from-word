@@ -339,7 +339,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  --answer-gradient: linear-gradient(135deg, #bba4f2 0%, #8edfc3 48%, #f2bd7d 100%);
+  --answer-gradient: linear-gradient(135deg, #d7c8ff 0%, #baf2de 48%, #ffd3a1 100%);
 }
 
 .answer-slot {
@@ -360,7 +360,7 @@ button {
 .answer-slot.revealed {
   width: auto;
   min-width: max(44px, calc(var(--word-length, 4) * 0.82em + 18px));
-  color: #fff;
+  color: var(--ink);
   background-color: var(--lavender-soft);
   background-image: var(--answer-gradient);
   background-position: var(--shared-gradient-x, 0) var(--shared-gradient-y, 0);
@@ -368,13 +368,12 @@ button {
   box-shadow: 0 8px 18px rgba(86, 50, 159, 0.24);
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 800;
-  text-shadow: 0 1px 2px rgba(33, 23, 53, 0.36);
 }
 
 .answer-slot.revealed:hover,
 .answer-slot.revealed:focus-visible {
   border-color: var(--accent);
-  color: #fff;
+  color: var(--ink);
 }
 
 .definition-dialog {

@@ -152,7 +152,7 @@
     elements.wordMenu.innerHTML = "";
 
     [...gameData.bigWords]
-      .sort((a, b) => b.answers.length - a.answers.length || a.word.localeCompare(b.word, "ru"))
+      .sort((a, b) => a.answers.length - b.answers.length || a.word.localeCompare(b.word, "ru"))
       .forEach((puzzle) => {
         const savedProgress = loadProgress(puzzle.word);
         const found = savedProgress.guessed.filter((word) =>
