@@ -339,6 +339,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+  --answer-gradient: linear-gradient(135deg, #bba4f2 0%, #8edfc3 48%, #f2bd7d 100%);
 }
 
 .answer-slot {
@@ -360,7 +361,10 @@ button {
   width: auto;
   min-width: max(44px, calc(var(--word-length, 4) * 0.82em + 18px));
   color: #fff;
-  background: linear-gradient(135deg, var(--accent), var(--mint-dark) 48%, var(--orange));
+  background-color: var(--lavender-soft);
+  background-image: var(--answer-gradient);
+  background-position: var(--shared-gradient-x, 0) var(--shared-gradient-y, 0);
+  background-size: var(--shared-gradient-width, 100%) var(--shared-gradient-height, 100%);
   box-shadow: 0 8px 18px rgba(86, 50, 159, 0.24);
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 800;

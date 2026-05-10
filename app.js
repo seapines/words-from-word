@@ -151,23 +151,25 @@
   function renderMenu() {
     elements.wordMenu.innerHTML = "";
 
-    gameData.bigWords.forEach((puzzle) => {
-      const savedProgress = loadProgress(puzzle.word);
-      const found = savedProgress.guessed.filter((word) =>
-        puzzle.answers.some((answer) => normalizeWord(answer.word) === normalizeWord(word))
-      ).length;
-      const total = puzzle.answers.length;
-      const button = document.createElement("button");
-      const word = document.createElement("strong");
-      const progressText = document.createElement("span");
-      button.className = "word-card";
-      button.type = "button";
-      word.textContent = hyphenateRussianWord(puzzle.word);
-      progressText.textContent = `${found} из ${total} найдено`;
-      button.append(word, progressText);
-      button.addEventListener("click", () => startPuzzle(puzzle.word));
-      elements.wordMenu.append(button);
-    });
+    [...gameData.bigWords]
+      .sort((a, b) => b.answers.length - a.answers.length || a.word.localeCompare(b.word, "ru"))
+      .forEach((puzzle) => {
+        const savedProgress = loadProgress(puzzle.word);
+        const found = savedProgress.guessed.filter((word) =>
+          puzzle.answers.some((answer) => normalizeWord(answer.word) === normalizeWord(word))
+        ).length;
+        const total = puzzle.answers.length;
+        const button = document.createElement("button");
+        const word = document.createElement("strong");
+        const progressText = document.createElement("span");
+        button.className = "word-card";
+        button.type = "button";
+        word.textContent = hyphenateRussianWord(puzzle.word);
+        progressText.textContent = `${found} из ${total} найдено`;
+        button.append(word, progressText);
+        button.addEventListener("click", () => startPuzzle(puzzle.word));
+        elements.wordMenu.append(button);
+      });
   }
 
   function startPuzzle(puzzleWord) {
@@ -226,6 +228,7 @@
     elements.progressText.textContent = `Найдено ${found} из ${total}. Подсказок использовано: ${state.hintsUsed}.`;
     elements.answerCount.textContent = `${found}/${total}`;
     renderAnswers();
+    paintSharedAnswerGradient();
     renderWinMessage();
     saveProgress();
   }
@@ -242,6 +245,19 @@
       slot.disabled = !isGuessed;
       slot.addEventListener("click", () => showDefinition(answer));
       elements.answerList.append(slot);
+    });
+  }
+
+  function paintSharedAnswerGradient() {
+    const listRect = elements.answerList.getBoundingClientRect();
+    const revealedSlots = elements.answerList.querySelectorAll(".answer-slot.revealed");
+
+    revealedSlots.forEach((slot) => {
+      const slotRect = slot.getBoundingClientRect();
+      slot.style.setProperty("--shared-gradient-width", `${listRect.width}px`);
+      slot.style.setProperty("--shared-gradient-height", `${Math.max(listRect.height, slotRect.height)}px`);
+      slot.style.setProperty("--shared-gradient-x", `${listRect.left - slotRect.left}px`);
+      slot.style.setProperty("--shared-gradient-y", `${listRect.top - slotRect.top}px`);
     });
   }
 
@@ -434,6 +450,7 @@
       closeDefinition();
     }
   });
+  window.addEventListener("resize", paintSharedAnswerGradient);
 
   renderMenu();
 })();
